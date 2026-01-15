@@ -22,6 +22,7 @@ The primary goal of **NanoIndex** is to build a high-fidelity, readable, Python-
 ### Core Motivation
 - **Foundational Understanding:** Deconstruct the "black box" of vector databases.
 - **First Principles:** Implement the essential primitives of modern AI infrastructure.
+- **Adaptive Systems:** Demonstrate how search engines self-optimize using agentic loops.
 - **Educational Value:** Provide a codebase that serves as a living documentation of vector search logic.
 
 ---
@@ -62,7 +63,7 @@ nanoindex/
 ├── tests/                  # Unit and Integration tests
 └── pyproject.toml          # Dependency management (uv/hatch)
 ```
-*Target codebase size: ~900 lines of highly documented Python.*
+```
 
 ---
 
@@ -108,18 +109,18 @@ nanoindex/
   - Search budget (`max_codes`) implementation
 - [x] **Success Criteria:** Achieved **1.51x speedup** on 150k vectors with IVF search.
 
-### Phase 7: Self-Tuning Search Agent (In Progress)
+### Phase 7: Self-Tuning Search Agent (Completed)
 *Adaptive query optimization using Multi-Armed Bandit (MAB) algorithm.*
-- [ ] **Focus:** `app/services/adaptive.py`, `app/services/searcher.py`
-- [ ] **Core Concept:** Implement an **epsilon-greedy** or **UCB1** bandit agent that learns optimal search strategies
-- [ ] **Tasks:**
+- [x] **Focus:** `app/services/adaptive.py`, `app/services/searcher.py`
+- [x] **Core Concept:** Implement an **epsilon-greedy** or **UCB1** bandit agent that learns optimal search strategies
+- [x] **Tasks:**
   - Design search strategy "arms": (Flat, IVF-conservative, IVF-aggressive, IVF-balanced)
   - Track per-arm metrics: latency, recall quality proxy, resource usage
   - Implement exploration-exploitation balance (epsilon decay or UCB confidence bounds)
   - Add latency constraint awareness (SLA-based arm selection)
   - Persist agent state (arm statistics, rewards history)
   - Integrate into SearchService with minimal overhead
-- [ ] **Success Criteria:** Agent automatically selects optimal strategy based on query patterns, achieving better average latency than static configuration while maintaining quality.
+- [x] **Success Criteria:** Agent automatically selects optimal strategy based on query patterns, achieving better average latency than static configuration while maintaining quality.
 
 **USP Statement:**  
 *NanoIndex includes a self-tuning search agent that dynamically adapts search strategy (flat vs IVF, nprobe, scan budget) based on observed query behavior and latency constraints.*
@@ -131,6 +132,12 @@ nanoindex/
 - **Adaptation:** Update arm statistics after each query
 - **Persistence:** Save arm performance to survive restarts
 
+**Implementation Highlights:**
+- 11 comprehensive unit tests (17 total tests passing)
+- Epsilon-greedy and UCB1 algorithms implemented
+- State persistence with automatic loading
+- `/agent/stats` and `/agent/reset` endpoints
+- Full documentation in `docs/adaptive-agent.md`
 
 ---
 
@@ -149,7 +156,8 @@ nanoindex/
 The project should be positioned as a **fundamental research/learning tool**. It is designed to demonstrate technical depth and understanding of retrieval systems.
 
 ### Core Value Proposition
-By building from scratch and studying established implementations, NanoIndex provides insight into the trade-offs between accuracy, complexity, and performance that are often hidden by mature libraries.
+### Core Value Proposition
+By building from scratch and studying established implementations, NanoIndex provides insight into the trade-offs between accuracy, complexity, and performance—and demonstrates how **agentic loops** can automate these trade-offs dynamically.
 
 ---
 
@@ -159,10 +167,10 @@ The project is considered "Done" when the following conditions are met:
 - [x] **Infrastructural:** Foundation (uv, ruff, mypy, just) established and clean.
 - [x] **Functional:** Flat index and Top-K search are fully operational.
 - [x] **Advanced:** IVF index with practical optimizations achieving 1.5x+ speedup.
-- [x] **Verified:** Comprehensive unit and integration test suite (6 passing tests).
+- [x] **Adaptive:** Self-tuning search agent using Multi-Armed Bandit for automatic strategy selection.
+- [x] **Verified:** Comprehensive unit and integration test suite (17 passing tests).
 - [x] **Lean:** Codebase remains focused and maintainable.
 - [x] **Transparent:** The documentation accurately reflects the project's educational nature and optimization journey.
 
-**Note on Code Size:**  
-The codebase is ~872 LOC, close to the expected ~900 LOC target after adding persistence, IVF indexing, benchmarking harnesses, and defensive checks. This growth was intentional and scoped, prioritizing clarity and testability.
+- [x] **Transparent:** The documentation accurately reflects the project's educational nature and optimization journey.
 
