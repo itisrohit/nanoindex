@@ -11,7 +11,7 @@ default:
 
 # Run the FastAPI development server
 dev port="8000":
-    uv run uvicorn app.main:app --reload --port {{port}}
+    uv run uvicorn app.main:app --reload --reload-exclude "data/*" --reload-exclude "dstore/*" --port {{port}}
 
 # --- Quality ---
 
