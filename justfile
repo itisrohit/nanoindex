@@ -37,6 +37,10 @@ update:
     uv lock --upgrade
     uv sync
 
+# Reset the local index data
+reset:
+    curl -X DELETE http://localhost:8000/api/v1/index/reset/
+
 # --- Testing ---
 
 # Run all unit and integration tests
