@@ -22,7 +22,7 @@ The primary goal of **NanoIndex** is to build a high-fidelity, readable, Python-
 ### Core Motivation
 - **Foundational Understanding:** Deconstruct the "black box" of vector databases.
 - **First Principles:** Implement the essential primitives of modern AI infrastructure.
-- **Adaptive Systems:** Demonstrate how search engines self-optimize using agentic loops.
+- **Adaptive Systems:** Demonstrate how search engines self-optimize using lightweight feedback-driven control loops.
 - **Educational Value:** Provide a codebase that serves as a living documentation of vector search logic.
 
 ---
@@ -45,6 +45,7 @@ To maintain project focus and ensure a transparent implementation, the following
 ## 3. Architecture Design
 
 ### Data Flow
+The API layer is intentionally thin and exists only as an execution harness; all core logic is framework-independent.
 NanoIndex follows a streamlined pipeline for vector retrieval:
 `Vectors` ➔ `Index Storage` ➔ `Distance Computation` ➔ `Top-K Selection`
 
@@ -156,7 +157,6 @@ nanoindex/
 The project should be positioned as a **fundamental research/learning tool**. It is designed to demonstrate technical depth and understanding of retrieval systems.
 
 ### Core Value Proposition
-### Core Value Proposition
 By building from scratch and studying established implementations, NanoIndex provides insight into the trade-offs between accuracy, complexity, and performance—and demonstrates how **agentic loops** can automate these trade-offs dynamically.
 
 ---
@@ -171,6 +171,3 @@ The project is considered "Done" when the following conditions are met:
 - [x] **Verified:** Comprehensive unit and integration test suite (17 passing tests).
 - [x] **Lean:** Codebase remains focused and maintainable.
 - [x] **Transparent:** The documentation accurately reflects the project's educational nature and optimization journey.
-
-- [x] **Transparent:** The documentation accurately reflects the project's educational nature and optimization journey.
-
