@@ -15,7 +15,7 @@ A single-node vector similarity search engine that implements flat and IVF-style
 
 ## Project Status
 
-NanoIndex is feature-complete as a learning-focused vector similarity engine. Future work is intentionally limited to documentation and minor refactoring to preserve clarity and scope.
+> **Status:** NanoIndex is **feature-complete** as a learning-focused vector similarity engine. Future work is intentionally limited to documentation and minor refactoring to preserve clarity and scope.
 
 ---
 
