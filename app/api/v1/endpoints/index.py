@@ -30,3 +30,15 @@ async def add_vectors(request: AddVectorsRequest) -> AddVectorsResponse:
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@router.delete("/reset")
+async def reset_index() -> dict[str, str]:
+    """
+    Reset the index by deleting all stored vectors.
+    """
+    try:
+        datastore.reset()
+        return {"message": "Index reset successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
