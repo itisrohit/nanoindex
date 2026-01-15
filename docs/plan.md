@@ -108,6 +108,30 @@ nanoindex/
   - Search budget (`max_codes`) implementation
 - [x] **Success Criteria:** Achieved **1.51x speedup** on 150k vectors with IVF search.
 
+### Phase 7: Self-Tuning Search Agent (In Progress)
+*Adaptive query optimization using Multi-Armed Bandit (MAB) algorithm.*
+- [ ] **Focus:** `app/services/adaptive.py`, `app/services/searcher.py`
+- [ ] **Core Concept:** Implement an **epsilon-greedy** or **UCB1** bandit agent that learns optimal search strategies
+- [ ] **Tasks:**
+  - Design search strategy "arms": (Flat, IVF-conservative, IVF-aggressive, IVF-balanced)
+  - Track per-arm metrics: latency, recall quality proxy, resource usage
+  - Implement exploration-exploitation balance (epsilon decay or UCB confidence bounds)
+  - Add latency constraint awareness (SLA-based arm selection)
+  - Persist agent state (arm statistics, rewards history)
+  - Integrate into SearchService with minimal overhead
+- [ ] **Success Criteria:** Agent automatically selects optimal strategy based on query patterns, achieving better average latency than static configuration while maintaining quality.
+
+**USP Statement:**  
+*NanoIndex includes a self-tuning search agent that dynamically adapts search strategy (flat vs IVF, nprobe, scan budget) based on observed query behavior and latency constraints.*
+
+**Technical Approach:**
+- **Multi-Armed Bandit (MAB):** Each search configuration is an "arm"
+- **Reward Signal:** Inverse latency (faster = higher reward) with quality penalty
+- **Exploration:** Epsilon-greedy (10% random) or UCB1 (confidence-based)
+- **Adaptation:** Update arm statistics after each query
+- **Persistence:** Save arm performance to survive restarts
+
+
 ---
 
 ## 5. Implementation Standards
