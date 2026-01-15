@@ -16,3 +16,16 @@ class SearchResponse(BaseModel):
     query_id: str
     results: list[SearchResult]
     latency_ms: float
+
+
+class AddVectorsRequest(BaseModel):
+    vectors: list[list[float]] = Field(..., description="List of vectors to add.")
+    ids: list[int] | None = Field(
+        None, description="Optional list of IDs for the vectors."
+    )
+
+
+class AddVectorsResponse(BaseModel):
+    count: int
+    total_count: int
+    message: str
