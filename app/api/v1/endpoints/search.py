@@ -18,7 +18,9 @@ async def perform_search(
     Perform a vector similarity search.
     """
     results, latency = search_service.search(
-        query_vector=request.vector, top_k=request.top_k or 10
+        query_vector=request.vector,
+        top_k=request.top_k or 10,
+        use_index=request.use_index,
     )
 
     return {
