@@ -48,13 +48,17 @@ NanoIndex follows a streamlined pipeline for vector retrieval:
 ### Directory Structure
 ```text
 nanoindex/
- ├── index.py        # Vector storage and ID management
- ├── distance.py     # L2 and Cosine similarity implementations
- ├── search.py       # Brute-force top-K search heuristics
- ├── ivf.py          # (Optional) simple Inverted File Indexing
- ├── benchmark.py    # Latency and scalability testing suite
- ├── PLAN.md         # Strategic roadmap (this document)
- └── README.md       # Project documentation
+├── app/
+│   ├── main.py             # FastAPI entry point
+│   ├── api/                # API Endpoints (v1)
+│   ├── core/               # Configuration and Settings
+│   ├── internal/           # Core math (Distance, etc.)
+│   ├── models/             # Pydantic schemas
+│   └── services/           # DataStore and Indexing logic
+├── data/                   # Persistent vector storage
+├── docs/                   # Documentation
+├── tests/                  # Unit and Integration tests
+└── pyproject.toml          # Dependency management (uv/hatch)
 ```
 *Target codebase size: 300–500 lines of highly documented Python.*
 
