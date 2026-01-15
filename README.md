@@ -176,6 +176,7 @@ NanoIndex is designed as a **fundamental research and learning tool** to demonst
 - Trade-offs between accuracy, complexity, and performance
 - Advanced optimization techniques for vector search
 - Clean, maintainable Python architecture
+- **System Limits:** [Failure Modes & Trade-offs](./docs/failure_modes.md) documented explicitly
 
 ---
 

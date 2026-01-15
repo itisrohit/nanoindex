@@ -11,6 +11,8 @@
 5. [Implementation Standards](#5-implementation-standards)
 6. [Strategic Positioning](#6-strategic-positioning)
 7. [Success Metrics](#7-success-metrics)
+8. [Failure Modes & Trade-offs](./failure_modes.md)
+
 
 ---
 
