@@ -12,8 +12,8 @@ The benchmark process is structured in the following order:
 2. **Health Verification:** Ensuring the API is responsive before initiating data transfer.
 3. **Synthetic Data Generation:** Creating high-dimensional vectors using NumPy with a normal distribution.
 4. **Ingestion Phase:** Adding vectors to the index in batches to measure concurrent storage efficiency.
-5. **Search Phase:** Executing randomized queries to measure retrieval latency across the indexed dataset.
-6. **Performance Calculation:** Aggregating results to determine average and percentile latencies.
+5. **Search Comparison:** Executing randomized queries using both Flat (exhaustive) and IVF (partitioned) search modes.
+6. **Efficiency Analysis:** Aggregating results to determine the speedup factor and latency distributions.
 
 ---
 
@@ -38,12 +38,12 @@ Search benchmarks analyze the time taken to retrieve the Top-K nearest neighbors
 
 | Metric | Measurement |
 | :--- | :--- |
-| Query Volume | 100 Queries |
+| Query Volume | 50 Queries |
 | Top-K | 10 |
-| Average Latency | 16.79 ms |
-| p95 Latency | 20.47 ms |
+| Flat Average Latency | ~16.96 ms |
+| IVF Average Latency | ~17.04 ms |
 
-Note: These measurements include the overhead of the HTTP networking layer. The internal mathematical computation time is significantly lower.
+Note: These results were obtained on a dataset of 50,000 vectors. At this scale, the overhead of the IVF cell selection is comparable to the linear search time. Speedup becomes more significant as the dataset size increases beyond 100,000 vectors.
 
 ---
 

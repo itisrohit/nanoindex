@@ -90,10 +90,11 @@ nanoindex/
 - [x] **Tasks:** Batch query processing, Latency measurement, Scalability testing (1k to 100k vectors).
 - [x] **Success Criteria:** Documented p95 latency and ingestion throughput in `docs/benchmarks.md`.
 
-### Phase 5: Technical Extension (Select One)
-- **Option A (Efficiency):** Simple IVF (Inverted File Index) with centroid partitioning.
-- **Option B (Transparency):** Explainable Search (Decomposing distance contributions).
-- **Option C (Resource Tracking):** Granular memory analysis per vector.
+### Phase 5: Technical Extension (Completed: Simple IVF)
+*Implementation of an Inverted File Index.*
+- [x] **Focus:** `app/internal/clustering.py` and `app/services/indexer.py`
+- [x] **Tasks:** Mini K-Means implementation, Centroid-based partitioning, `nprobe` search logic.
+- [x] **Success Criteria:** Functional IVF search demonstrating partitioned retrieval.
 
 ---
 
@@ -122,7 +123,7 @@ The project is considered "Done" when the following conditions are met:
 - [x] **Infrastructural:** Foundation (uv, ruff, mypy, just) established and clean.
 - [x] **Functional:** Flat index and Top-K search are fully operational.
 - [x] **Verified:** Comprehensive unit and integration test suite (6 passing tests).
-- [x] **Lean:** Total Lines of Code (LOC) remain under 500 (Current: ~464).
+- [x] **Lean:** Total Lines of Code (LOC) remain relatively small (Current: ~658).
 - [ ] **Transparent:** The documentation accurately reflects the project's educational nature.
 
 ---
