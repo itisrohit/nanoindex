@@ -16,6 +16,7 @@ A single-node vector similarity search engine that implements flat and IVF-style
 ## Key Features
 
 - **Advanced Indexing:** IVF (Inverted File Index) with K-Means partitioning for sub-linear search performance
+- **Self-Tuning Agent:** Adaptive search agent using Multi-Armed Bandit algorithms (epsilon-greedy, UCB1) to automatically optimize search strategy
 - **Performance Optimized:** Achieves 1.51x speedup on 150k vectors through squared norm caching, batch quantization, and search budget control
 - **Mathematical Clarity:** Python-only implementation of core search primitives (L2, Cosine)
 - **Efficient Storage:** Memory-mapped files (`mmap`) for large-scale vector storage without excessive RAM usage
@@ -90,6 +91,7 @@ The API will be available at `http://localhost:8000`
 | Top-K | 10 | 10 | - |
 
 **Key Optimizations:**
+- **Self-Tuning Agent:** Automatically selects best search strategy (Flat vs IVF) based on latency constraints
 - Squared norm caching for faster distance computation
 - Batch quantization using matrix multiplication
 - K-Means subsampling for efficient training
