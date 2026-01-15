@@ -10,7 +10,7 @@ from app.services.searcher import search_service
 router = APIRouter()
 
 
-@router.post("/", response_model=SearchResponse)
+@router.post("", response_model=SearchResponse)
 async def perform_search(
     request: SearchRequest,
 ) -> dict[str, str | list[SearchResult] | float]:
