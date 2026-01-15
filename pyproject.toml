@@ -71,3 +71,7 @@ exclude = ["venv", ".venv", "__pycache__", "dstore"]
 [[tool.mypy.overrides]]
 module = "numpy.*"
 ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
