@@ -40,17 +40,28 @@ class SearchService:
             candidate_indices = indexer.search(
                 query_np, nprobe=min(10, indexer.n_cells)
             )
-            search_vectors = all_vectors[candidate_indices]
+            # If no candidates found (empty clusters), fallback to flat
+            if len(candidate_indices) > 0:
+                search_vectors = all_vectors[candidate_indices]
+                search_norms = datastore.get_norms()[candidate_indices]
+            else:
+                search_vectors = all_vectors
+                search_norms = datastore.get_norms()
+                candidate_indices = None
         else:
             search_vectors = all_vectors
+            search_norms = datastore.get_norms()
 
         # Compute distances based on metric
         if metric == "l2":
-            scores = l2_distance(query_np, search_vectors)
+            # Pass cached squared norms for speed
+            scores = l2_distance(query_np, search_vectors, v_sq=search_norms)
             # For L2, lower is better (ascending)
             relative_top_indices = np.argsort(scores)[:top_k]
         else:
-            scores = cosine_similarity(query_np, search_vectors)
+            # For cosine, we would need L2 norms (sqrt of squared norms)
+            v_norms = np.sqrt(search_norms) if len(search_norms) > 0 else None
+            scores = cosine_similarity(query_np, search_vectors, v_norms=v_norms)
             # For Cosine, higher is better (descending)
             relative_top_indices = np.argsort(scores)[::-1][:top_k]
 
