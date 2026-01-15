@@ -22,12 +22,11 @@ def get_application() -> FastAPI:
 
     _app.include_router(api_router, prefix=settings.API_V1_STR)
 
+    @_app.get("/health")
+    async def health_check() -> dict[str, str]:
+        return {"status": "healthy", "project": settings.PROJECT_NAME}
+
     return _app
 
 
 app = get_application()
-
-
-@app.get("/health")
-async def health_check() -> dict[str, str]:
-    return {"status": "healthy", "project": settings.PROJECT_NAME}
