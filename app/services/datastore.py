@@ -1,3 +1,4 @@
+import json
 import os
 
 import numpy as np
@@ -18,6 +19,16 @@ class DataStore:
         self.ids: np.ndarray | None = None
         self.dimension: int = 0
         self.count: int = 0
+        self.meta_path = os.path.join(self.directory, "meta.json")
+
+        # Try to auto-load if meta exists
+        if os.path.exists(self.meta_path):
+            self.load()
+
+    def _save_meta(self) -> None:
+        """Save metadata to disk."""
+        with open(self.meta_path, "w") as f:
+            json.dump({"count": self.count, "dimension": self.dimension}, f)
 
     def initialize(self, dimension: int, initial_capacity: int = 1000) -> None:
         """Initialize the datastore files."""
@@ -33,27 +44,30 @@ class DataStore:
             ids_path, dtype="int64", mode="w+", shape=(initial_capacity,)
         )
         self.count = 0
+        self._save_meta()
 
-    def load(self, dimension: int) -> None:
-        """Load existing datastore files if they exist."""
-        self.dimension = dimension
+    def load(self) -> None:
+        """Load existing datastore files using metadata."""
+        if not os.path.exists(self.meta_path):
+            return
+
+        with open(self.meta_path) as f:
+            meta = json.load(f)
+            self.count = meta["count"]
+            self.dimension = meta["dimension"]
+
         vector_path = os.path.join(self.directory, "vectors.npy")
         ids_path = os.path.join(self.directory, "ids.npy")
 
         if os.path.exists(vector_path) and os.path.exists(ids_path):
-            # We don't know the capacity easily without checking file size,
-            # but we can try to infer it. For simplicity, we'll use 'r+'
+            # Map existing files in read+ mode
             self.vectors = np.memmap(vector_path, dtype="float32", mode="r+")
-            # Reshape based on dimension
+            # Infer capacity from file size
             num_elements = self.vectors.size
-            capacity = num_elements // dimension
-            self.vectors = self.vectors.reshape((capacity, dimension))
+            capacity = num_elements // self.dimension
+            self.vectors = self.vectors.reshape((capacity, self.dimension))
 
             self.ids = np.memmap(ids_path, dtype="int64", mode="r+")
-            # We need a way to track 'count'. For now, let's assume it's stored or infer from IDs.
-            # In a real system, we'd store metadata (count, dimension, etc.) in a separate JSON/Header.
-            # For now, let's assume 'initialize' or 'add_vectors' sets it.
-            self.count = capacity  # Placeholder: assumes full for now or needs metadata
 
     def _resize(self, new_capacity: int) -> None:
         """Resize the memory-mapped files to a new capacity."""
@@ -81,6 +95,8 @@ class DataStore:
         if self.vectors is not None and self.ids is not None:
             self.vectors[: self.count] = current_vectors
             self.ids[: self.count] = current_ids
+            self.count = len(current_vectors)
+            self._save_meta()
 
     def add_vectors(self, vectors: np.ndarray, ids: np.ndarray | None = None) -> None:
         """Append vectors to the datastore."""
@@ -108,6 +124,7 @@ class DataStore:
                 )
 
             self.count += num_new
+            self._save_meta()
             if isinstance(self.vectors, np.memmap):
                 self.vectors.flush()
 
@@ -127,10 +144,9 @@ class DataStore:
         vector_path = os.path.join(self.directory, "vectors.npy")
         ids_path = os.path.join(self.directory, "ids.npy")
 
-        if os.path.exists(vector_path):
-            os.remove(vector_path)
-        if os.path.exists(ids_path):
-            os.remove(ids_path)
+        for p in [vector_path, ids_path, self.meta_path]:
+            if os.path.exists(p):
+                os.remove(p)
 
         self.vectors = None
         self.ids = None
