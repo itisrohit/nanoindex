@@ -34,16 +34,46 @@ The system utilizes dynamic memory-mapping (mmap) resizing, allowing for efficie
 
 ## 3. Search Performance
 
-Search benchmarks analyze the time taken to retrieve the Top-K nearest neighbors from the flat index.
+Search benchmarks analyze the time taken to retrieve the Top-K nearest neighbors using both Flat (exhaustive) and IVF (partitioned) search strategies.
+
+### Baseline Results (50k vectors)
 
 | Metric | Measurement |
 | :--- | :--- |
 | Query Volume | 50 Queries |
 | Top-K | 10 |
-| Flat Average Latency | ~16.96 ms |
-| IVF Average Latency | ~17.04 ms |
+| Flat Average Latency | ~18.54 ms |
+| IVF Average Latency | ~17.10 ms |
+| Speedup | **1.08x** |
 
-Note: These results were obtained on a dataset of 50,000 vectors. At this scale, the overhead of the IVF cell selection is comparable to the linear search time. Speedup becomes more significant as the dataset size increases beyond 100,000 vectors.
+### Optimized Results (150k vectors)
+
+| Metric | Measurement |
+| :--- | :--- |
+| Query Volume | 50 Queries |
+| Top-K | 10 |
+| IVF Cells | 200 |
+| Flat Average Latency | ~30.51 ms |
+| IVF Average Latency | ~20.23 ms |
+| Speedup | **1.51x** |
+
+### Performance Optimizations
+
+The following techniques were implemented to improve search efficiency:
+
+1. **Squared Norm Caching**  
+   Pre-compute and store `||v||²` for all vectors to eliminate redundant calculations during distance computation.
+
+2. **Batch Quantization**  
+   Use matrix multiplication (`dist² = ||v||² + ||c||² - 2·v·c`) for cell assignment instead of iterative loops.
+
+3. **K-Means Subsampling**  
+   Train clustering on a representative subset of vectors (max 10k samples), then assign all data points to the final centroids.
+
+4. **Search Budget Control**  
+   Limit the maximum number of vectors scanned per query (`max_codes = 50k`) to ensure predictable query latency.
+
+**Key Insight:** IVF speedup becomes more pronounced as dataset size increases. At 150k vectors, we observe a **1.51x improvement** over exhaustive search, with the gap widening further at larger scales.
 
 ---
 
