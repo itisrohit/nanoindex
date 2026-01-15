@@ -126,6 +126,15 @@ See [`docs/benchmarks.md`](./docs/benchmarks.md) for detailed performance analys
 
 ---
 
+## Developer Inspection UI (Optional)
+
+Terminal-based inspection UI used to visualize test status, benchmarks, and adaptive search behavior.
+This UI is read-only and intended purely for debugging and learning.
+
+![NanoIndex TUI](./assets/tui.png)
+
+---
+
 ## API Documentation
 
 Once the server is running (`just dev`), you can access the interactive documentation at:
