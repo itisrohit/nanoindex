@@ -13,6 +13,12 @@ A single-node vector similarity search engine that implements flat and IVF-style
 
 ---
 
+## Project Status
+
+NanoIndex is feature-complete as a learning-focused vector similarity engine. Future work is intentionally limited to documentation and minor refactoring to preserve clarity and scope.
+
+---
+
 ## Key Features
 
 - **Advanced Indexing:** IVF (Inverted File Index) with K-Means partitioning for sub-linear search performance
@@ -165,6 +171,8 @@ uv run python scripts/benchmark.py
 
 - **[Project Plan](./docs/plan.md)** - Architecture, roadmap, and design decisions
 - **[Benchmarks](./docs/benchmarks.md)** - Detailed performance analysis
+- **[Adaptive Agent](./docs/adaptive-agent.md)** - Self-tuning agent design and algorithms
+- **[System Limits](./docs/failure_modes.md)** - Failure modes and engineering trade-offs
 - **[API Docs](http://localhost:8000/api/v1/docs)** - Interactive API documentation (when server is running)
 
 ---
