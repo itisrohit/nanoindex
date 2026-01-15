@@ -5,6 +5,9 @@ class SearchRequest(BaseModel):
     vector: list[float] = Field(..., description="The query vector.")
     top_k: int | None = Field(10, description="Number of results to return.")
     id: str | None = None
+    use_index: bool = Field(
+        True, description="Whether to use the IVF index if available."
+    )
 
 
 class SearchResult(BaseModel):
