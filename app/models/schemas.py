@@ -8,6 +8,9 @@ class SearchRequest(BaseModel):
     use_index: bool = Field(
         True, description="Whether to use the IVF index if available."
     )
+    use_agent: bool = Field(
+        False, description="Whether to use adaptive agent for strategy selection."
+    )
 
 
 class SearchResult(BaseModel):
@@ -19,6 +22,7 @@ class SearchResponse(BaseModel):
     query_id: str
     results: list[SearchResult]
     latency_ms: float
+    strategy: str | None = Field(None, description="Strategy used by adaptive agent.")
 
 
 class AddVectorsRequest(BaseModel):
