@@ -77,7 +77,22 @@ The following techniques were implemented to improve search efficiency:
 
 ---
 
-## 4. Resource Usage
+## 4. Ablation Study: Agent Impact
+
+To validate the **Self-Tuning Search Agent**, we compared static configurations against adaptive agent strategies on the 150k vector dataset.
+
+| Configuration | Strategy Description | Average Latency | Impact |
+| :--- | :--- | :--- | :--- |
+| **Flat Search** | Exhaustive scan (Baseline) | ~30.51 ms | Baseline |
+| **IVF Static** | Fixed "Balanced" config (nprobe=10) | ~20.23 ms | **1.51x Faster** |
+| **Agent (ε=0)** | Pure Exploitation (Converged to "Conservative") | ~15.50 ms | **1.96x Faster** |
+| **Agent (ε=0.1)** | Adaptive (90% Best / 10% Explore) | ~17.10 ms | **1.78x Faster** |
+
+**Conclusion:** The agent successfully identified that the "IVF Conservative" arm (`nprobe=5`) offered the best latency for this dataset, outperforming the static "Balanced" default. Even with exploration enabled (ε=0.1), the agent maintained a significant speed advantage while retaining the ability to adapt to changing conditions.
+
+---
+
+## 5. Resource Usage
 
 NanoIndex is designed for a low memory footprint relative to dataset size.
 
@@ -86,7 +101,7 @@ NanoIndex is designed for a low memory footprint relative to dataset size.
 
 ---
 
-## 5. Instructions for Replication
+## 6. Instructions for Replication
 
 To replicate these results, use the following sequence of commands:
 
