@@ -20,7 +20,7 @@ def benchmark_ingestion(
         vectors = np.random.rand(batch_size, dimension).astype("float32").tolist()
         ids = list(range(i, i + batch_size))
         response = httpx.post(
-            f"{BASE_URL}/index/add/",
+            f"{BASE_URL}/index/add",
             json={"vectors": vectors, "ids": ids},
             timeout=30.0,
         )
@@ -47,7 +47,7 @@ def benchmark_search(
         query = np.random.rand(dimension).astype("float32").tolist()
         start_time = time.perf_counter()
         response = httpx.post(
-            f"{BASE_URL}/search/",
+            f"{BASE_URL}/search",
             json={"vector": query, "top_k": top_k, "use_index": use_index},
             timeout=10.0,
         )
@@ -79,21 +79,33 @@ def train_index(n_cells: int = 100) -> None:
 
 if __name__ == "__main__":
     # Settings (increased size for more visible speedup)
-    TOTAL_VECTORS = 50000
+    TOTAL_VECTORS = 150000
     DIMENSION = 128
     NUM_QUERIES = 50
 
     try:
         # Reset first
-        httpx.delete(f"{BASE_URL}/index/reset")
+        print("Resetting index...")
+        reset_resp = httpx.delete(f"{BASE_URL}/index/reset", timeout=10.0)
+        if reset_resp.status_code != 200:
+            print(f"Warning: Reset failed with {reset_resp.status_code}")
 
-        benchmark_ingestion(TOTAL_VECTORS, DIMENSION)
+        # Ingest data
+        ingestion_time = benchmark_ingestion(TOTAL_VECTORS, DIMENSION)
+        if ingestion_time == 0.0:
+            print("Ingestion failed! Aborting benchmark.")
+            exit(1)
 
         # 1. Flat Search Baseline
         flat_avg = benchmark_search(NUM_QUERIES, DIMENSION, use_index=False)
+        if flat_avg == 0.0:
+            print("Flat search failed! Aborting benchmark.")
+            exit(1)
 
-        # 2. Train and IVF Search
+        # 2. Train IVF Index
         train_index(n_cells=200)
+
+        # 3. IVF Search
         ivf_avg = benchmark_search(NUM_QUERIES, DIMENSION, use_index=True)
 
         if flat_avg > 0 and ivf_avg > 0:
@@ -102,6 +114,8 @@ if __name__ == "__main__":
             print(f"Flat Latency: {flat_avg:.2f}ms")
             print(f"IVF Latency:  {ivf_avg:.2f}ms")
             print(f"Speedup:      {speedup:.2f}x")
+        else:
+            print("\nBenchmark incomplete due to errors.")
 
     except Exception as e:
         print(
