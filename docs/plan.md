@@ -72,18 +72,17 @@ nanoindex/
 - [x] **Tasks:** L2 distance, Cosine similarity, Vector normalization.
 - [x] **Success Criteria:** Functions validated against NumPy primitives; Passing Mypy strict checks.
 
-### Phase 2: Indexing Architecture (In Progress)
+### Phase 2: Indexing Architecture (Completed)
 *Development of the vector storage layer.*
 - [x] **Focus:** `app/services/datastore.py`
 - [x] **Tasks:** Memory-mapped (`mmap`) NumPy storage, Integer ID mapping.
-- [ ] **Next:** Vector addition interface and automated file initialization.
-- [ ] **Success Criteria:** Conceptually equivalent to a flat index structure with persistence.
+- [x] **Success Criteria:** Conceptually equivalent to a flat index structure with persistence.
 
-### Phase 3: Retrieval Logic
+### Phase 3: Retrieval Logic (Completed)
 *Execution of the search algorithm.*
-- **Focus:** `search.py`
-- **Tasks:** Comprehensive query-to-index distance calculation, Top-K selection logic.
-- **Success Criteria:** Deterministic nearest neighbor retrieval for both L2 and Cosine metrics.
+- [x] **Focus:** `app/services/searcher.py` and `app/api/v1/endpoints/search.py`
+- [x] **Tasks:** Comprehensive query-to-index distance calculation, Top-K selection logic.
+- [x] **Success Criteria:** Deterministic nearest neighbor retrieval for both L2 and Cosine metrics via API.
 
 ### Phase 4: Performance Analysis
 *Benchmarking and validation.*
