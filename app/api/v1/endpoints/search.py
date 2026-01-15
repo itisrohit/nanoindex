@@ -1,6 +1,11 @@
+"""
+API endpoints for vector search.
+"""
+
 from fastapi import APIRouter
 
 from app.models.schemas import SearchRequest, SearchResponse, SearchResult
+from app.services.searcher import search_service
 
 router = APIRouter()
 
@@ -12,5 +17,12 @@ async def perform_search(
     """
     Perform a vector similarity search.
     """
-    # Placeholder for actual search logic
-    return {"query_id": request.id or "default", "results": [], "latency_ms": 0.0}
+    results, latency = search_service.search(
+        query_vector=request.vector, top_k=request.top_k or 10
+    )
+
+    return {
+        "query_id": request.id or "default",
+        "results": results,
+        "latency_ms": latency,
+    }
