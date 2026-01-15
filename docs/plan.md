@@ -66,17 +66,18 @@ nanoindex/
 
 ## 4. Project Roadmap
 
-### Phase 1: Mathematical Foundation
+### Phase 1: Mathematical Foundation (Completed)
 *Implementation of core distance metrics.*
-- **Focus:** `distance.py`
-- **Tasks:** L2 distance, Cosine similarity, Vector normalization.
-- **Success Criteria:** Functions validated against NumPy primitives; No external dependencies.
+- [x] **Focus:** `app/internal/distance.py`
+- [x] **Tasks:** L2 distance, Cosine similarity, Vector normalization.
+- [x] **Success Criteria:** Functions validated against NumPy primitives; Passing Mypy strict checks.
 
-### Phase 2: Indexing Architecture
+### Phase 2: Indexing Architecture (In Progress)
 *Development of the vector storage layer.*
-- **Focus:** `index.py`
-- **Tasks:** Contiguous NumPy matrix storage, Integer ID mapping, `add(vectors)` interface.
-- **Success Criteria:** Conceptually equivalent to a flat index structure.
+- [x] **Focus:** `app/services/datastore.py`
+- [x] **Tasks:** Memory-mapped (`mmap`) NumPy storage, Integer ID mapping.
+- [ ] **Next:** Vector addition interface and automated file initialization.
+- [ ] **Success Criteria:** Conceptually equivalent to a flat index structure with persistence.
 
 ### Phase 3: Retrieval Logic
 *Execution of the search algorithm.*
@@ -119,6 +120,7 @@ By building from scratch, NanoIndex provides insight into the trade-offs between
 ## 7. Success Metrics
 
 The project is considered "Done" when the following conditions are met:
+- [x] **Infrastructural:** Foundation (uv, ruff, mypy, just) established and clean.
 - [ ] **Functional:** Flat index and Top-K search are fully operational.
 - [ ] **Verified:** Benchmark results are reproducible and documented.
 - [ ] **Lean:** Total Lines of Code (LOC) remain under 500.
