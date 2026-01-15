@@ -47,6 +47,10 @@ reset:
 test *args:
     uv run pytest {{args}}
 
+# Run the interactive TUI dashboard
+tui:
+    uv run python scripts/tui.py
+
 # --- Cleanup ---
 
 # Remove temporary files and caches
