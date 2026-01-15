@@ -140,6 +140,7 @@ nanoindex/
 - Epsilon-greedy and UCB1 algorithms implemented
 - State persistence with automatic loading
 - `/agent/stats` and `/agent/reset` endpoints
+- **Visualization:** Interactive TUI dashboard (`just tui`) for live monitoring
 - Full documentation in `docs/adaptive-agent.md`
 
 ---

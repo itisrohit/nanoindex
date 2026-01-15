@@ -23,6 +23,7 @@ A single-node vector similarity search engine that implements flat and IVF-style
 ## Key Features
 
 - **Advanced Indexing:** IVF (Inverted File Index) with K-Means partitioning for sub-linear search performance
+- **Interactive Dashboard:** Terminal User Interface (TUI) for real-time visualization of test status, agent telemetry, and benchmarks
 - **Self-Tuning Agent:** Adaptive search agent using Multi-Armed Bandit algorithms (epsilon-greedy, UCB1) to automatically optimize search strategy
 - **Performance Optimized:** Achieves 1.51x speedup on 150k vectors through squared norm caching, batch quantization, and search budget control
 - **Mathematical Clarity:** Python-only implementation of core search primitives (L2, Cosine)
@@ -119,6 +120,9 @@ See [`docs/benchmarks.md`](./docs/benchmarks.md) for detailed performance analys
 | `just reset` | Reset the vector index (clear all data) |
 | `just update` | Upgrade dependencies and update the lockfile |
 | `just clean` | Remove all temporary caches and virtual environments |
+| `just tui` | **Launch Terminal Dashboard** (Visualizes tests, agent stats, and benchmarks) |
+
+> **Note:** The TUI Agent panel requires data from `data/agent_state.json`. Run `python scripts/benchmark.py` or execute queries to populate this telemetry.
 
 ---
 
