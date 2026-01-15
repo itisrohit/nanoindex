@@ -1,5 +1,5 @@
 """
-Performance benchmark for NanoIndex.
+Performance benchmark for NanoIndex including IVF comparison.
 """
 
 import time
@@ -36,19 +36,23 @@ def benchmark_ingestion(
     return duration
 
 
-def benchmark_search(num_queries: int, dimension: int, top_k: int = 10) -> float:
-    print(f"Benchmarking Search: {num_queries} queries, top_k={top_k}...")
+def benchmark_search(
+    num_queries: int, dimension: int, top_k: int = 10, use_index: bool = True
+) -> float:
+    mode = "IVF" if use_index else "Flat"
+    print(f"Benchmarking Search ({mode}): {num_queries} queries, top_k={top_k}...")
     latencies: list[float] = []
 
     for _ in range(num_queries):
         query = np.random.rand(dimension).astype("float32").tolist()
         start_time = time.perf_counter()
         response = httpx.post(
-            f"{BASE_URL}/search/", json={"vector": query, "top_k": top_k}, timeout=10.0
+            f"{BASE_URL}/search/",
+            json={"vector": query, "top_k": top_k, "use_index": use_index},
+            timeout=10.0,
         )
         end_time = time.perf_counter()
         if response.status_code == 200:
-            # We use the wall-clock time including network overhead for the benchmark
             latencies.append((end_time - start_time) * 1000)
         else:
             print(f"Search error: {response.status_code} - {response.text}")
@@ -58,24 +62,47 @@ def benchmark_search(num_queries: int, dimension: int, top_k: int = 10) -> float
         return 0.0
 
     avg_latency = np.mean(latencies)
-    p95_latency = np.percentile(latencies, 95)
-    print(f"Average Latency: {avg_latency:.2f}ms")
-    print(f"p95 Latency: {p95_latency:.2f}ms")
+    print(f"{mode} Average Latency: {avg_latency:.2f}ms")
     return float(avg_latency)
 
 
+def train_index(n_cells: int = 100) -> None:
+    print(f"Training IVF Index with {n_cells} cells...")
+    start_time = time.perf_counter()
+    response = httpx.post(f"{BASE_URL}/index/train?n_cells={n_cells}", timeout=60.0)
+    duration = time.perf_counter() - start_time
+    if response.status_code == 200:
+        print(f"Index trained in {duration:.2f}s")
+    else:
+        print(f"Training failed: {response.text}")
+
+
 if __name__ == "__main__":
-    # Settings
-    TOTAL_VECTORS = 10000
+    # Settings (increased size for more visible speedup)
+    TOTAL_VECTORS = 50000
     DIMENSION = 128
-    NUM_QUERIES = 100
+    NUM_QUERIES = 50
 
     try:
-        # Check health first
-        httpx.get(f"{BASE_URL}/health")
+        # Reset first
+        httpx.delete(f"{BASE_URL}/index/reset")
 
         benchmark_ingestion(TOTAL_VECTORS, DIMENSION)
-        benchmark_search(NUM_QUERIES, DIMENSION)
+
+        # 1. Flat Search Baseline
+        flat_avg = benchmark_search(NUM_QUERIES, DIMENSION, use_index=False)
+
+        # 2. Train and IVF Search
+        train_index(n_cells=200)
+        ivf_avg = benchmark_search(NUM_QUERIES, DIMENSION, use_index=True)
+
+        if flat_avg > 0 and ivf_avg > 0:
+            speedup = flat_avg / ivf_avg
+            print("\nSummary:")
+            print(f"Flat Latency: {flat_avg:.2f}ms")
+            print(f"IVF Latency:  {ivf_avg:.2f}ms")
+            print(f"Speedup:      {speedup:.2f}x")
+
     except Exception as e:
         print(
             f"Benchmark failed: {e}. Make sure the server is running with 'just dev'."
