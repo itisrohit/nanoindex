@@ -8,6 +8,7 @@ A single-node vector similarity search engine that implements flat and IVF-style
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green.svg)](https://fastapi.tiangolo.com)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](http://mypy-lang.org/)
+[![CI](https://github.com/itisrohit/nanoindex/actions/workflows/ci.yml/badge.svg)](https://github.com/itisrohit/nanoindex/actions/workflows/ci.yml)
 
 </div>
 
